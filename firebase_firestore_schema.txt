@@ -1,0 +1,54 @@
+Firestore Database Schema:
+
+Collections:
+
+1.  **sounds**
+    *   Document ID: `string` (auto-generated or UUID)
+    *   Fields:
+        *   `id`: `string` (UUID)
+        *   `name`: `string`
+        *   `source_type`: `string` (enum: 'predefined', 'recorded', 'uploaded')
+        *   `source_url`: `string`
+        *   `created_at`: `Timestamp`
+
+2.  **fragments**
+    *   Document ID: `string` (auto-generated or UUID)
+    *   Fields:
+        *   `id`: `string` (UUID)
+        *   `author_id`: `string`
+        *   `author_name`: `string`
+        *   `title`: `string` (optional)
+        *   `rows`: `number` (default: 4)
+        *   `columns`: `number` (default: 4)
+        *   `bpm`: `number` (default: 120)
+        *   `created_at`: `Timestamp`
+        *   `updated_at`: `Timestamp`
+        *   `original_fragment_id`: `string` (UUID, optional)
+        *   `original_author_name`: `string` (optional)
+        *   `view_count`: `number` (default: 0)
+    *   Subcollections:
+        *   **pads**
+            *   Document ID: `string` (auto-generated or UUID)
+            *   Fields:
+                *   `id`: `string` (UUID)
+                * `fragment_id`: `string` (UUID)
+                *   `row_position`: `number`
+                *   `column_position`: `number`
+                *   `sound_id`: `string` (UUID, optional)
+                *   `is_active`: `boolean` (default: false)
+        *   **likes**
+            *   Document ID: `string` (auto-generated or UUID)
+            *   Fields:
+                *  `id`: `string` (UUID)
+                *  `fragment_id`: `string` (UUID)
+                *   `user_id`: `string`
+                *   `created_at`: `Timestamp`
+        *   **comments**
+            *   Document ID: `string` (auto-generated or UUID)
+            *   Fields:
+                *  `id`: `string` (UUID)
+                *  `fragment_id`: `string` (UUID)
+                *   `user_id`: `string`
+                *   `user_name`: `string`
+                *   `text`: `string`
+                *   `created_at`: `Timestamp`

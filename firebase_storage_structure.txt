@@ -1,0 +1,16 @@
+Firebase Storage Structure:
+
+Bucket: sounds
+
+    Subdirectories:
+        - hiphop/
+            - trap/
+                - drums/
+                - bass/
+                - synth/
+            - lofi/
+                - drums/
+                - bass/
+                - synth/
+        - electronic/
+        - rock/
