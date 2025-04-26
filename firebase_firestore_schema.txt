@@ -10,6 +10,13 @@ Collections:
         *   `source_type`: `string` (enum: 'predefined', 'recorded', 'uploaded')
         *   `source_url`: `string`
         *   `created_at`: `Timestamp`
+    * Subcollections:
+        * **likes**
+            * Document ID: `string` (auto-generated or UUID)
+            * Fields:
+                * `id`: `string` (UUID)
+                * `user_id`: `string`
+                * `created_at`: `Timestamp`
 
 2.  **fragments**
     *   Document ID: `string` (auto-generated or UUID)

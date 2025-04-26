@@ -70,14 +70,14 @@ const AudioContext = createContext<AudioContextType | undefined>(undefined);
 export const DEFAULT_GRID_SIZE = 4;
 const DEFAULT_BPM = 120;
 
-// Updated sound sources with authentic drum kit sounds
-const PREDEFINED_SOUNDS: { name: string; src: string }[] = [
-  { name: 'Kick', src: 'data:audio/wav;base64,UklGRtAWAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0Ya4WAAAAAP8AAAACAAAA/f///gIAAAEAAAD9AAAA/v///gAAAAH/AAD+/v8AAP8AAAEBAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAQEAAAAAAAAAAAEAAAAAAAAAAAAAAQAAAAAAAAAAAAEAAAABAAAAAAD///8AAgEAAAAAAAAAAP8AAAABAAAA/////wAAAAEBAAAA/wAAAAAAAAD/AQAAAQAAAP7///4BAQACAQAAAQAAAf8AAAEBAAABAAAA/wAAAP8AAAACAAAA//8AAAEAAAD//wAA//8AAAIAAQD+/wAA//8AAAIAAQD9/wAA//8AAAIBAQABAwIAAAX//wII/f8FC/f/FxzfACYpvACMkG0A0NQ7AM/cFgDBzgwApbAQABUeEgAcJAgA5OrpANXd5AAcJNsAHybFAMLK1QBiaugA9Pj4ACAm8gD2+v8Ayc/xAM3S3QCjqM0Auby3AP8C6QADDNED8PPfA9LV0APGyccDr7PgA7K28AOSl+kDcHbjA11h9gM7Pe0DFhfnAwME1wPm6NoDfYHTAwABwQOipswDhYm6A21wvQNfYrcDUlS1A0dJvwM+QbwDNzm+Ayorxwc1ONsHQETyBzM27wYpLesFGh3jBQgL5QXu8fUF0dbkBbW75AXAxPMFsrbeBaepzwWcn80Fk5XIBYeKygWAg9AFcnXQBWdq0QVcX84FUlTSBUpM1QU/QdYFNTfbBSsv3AUkKdsFHiPWBRkg1AUUGc8FEhbKBRERxQUVGLsFHSC1BSwutgU7PLQFVFewBWVoqgV6fKQFAAAAAQAAAAEAAAABAAAAAgAAAAIAAAACAAAAAwAAAAMAAAAEAAAABQAAAAYAAAAHAAAACQAAAAsAAAAMAAAADwAAABIAAAAVAAAAGAAAABwAAAAgAAAAJAAAACkAAAAvAAAANQAAADsAAABCAAAASgAAAFMAAABcAAAAZQAAAG8AAAB5AAAAhAAAAI8AAACbAAAApwAAALQAAADCAAAA0AAAAOAAAADwAAAAAAAAEAAAADAHAABwDwAAMBgAAHAgAADwKAAA8DEAAPg6AAD4QwAAAE0AAABWAAAAXwAAAGgAAABxAAAAewAAAIQAAACOAAAAmAAAAKIAAACsAAAAtgAAAMEAAADMAAAA1wAAAOMAAADvAAAA+wAAAAcBAAAUAQAAIQEAAC4BAAA8AQAASwEAAFkBAABoAQAAeAEAAIcBAACYAQAAqAEAALkBAADKAQAA3QEAAPABAAAEAgAAGAIAACwCAABBAgAAVgIAAGsCAACCAgAAlwIAAK0CAADDAgAA2gIAAPICAAAJAwAAIQMAADkDAABRAwAAawMAAIQDAACeAwAAvAMAANkDAAD3AwAAFQQAADMEAABRBAAAcgQAAJEEAACwBAAA0QQAAPEAAAARAQAAR/7//7v8///6+v//ZPn//xj4//8T9///l/X//2n0//+N8///+fL//6ny//+X8v//5/L///fz//9j9f//8vb//8D4//+h+v//qvz//87+//8AAAAAJgEAAGQCAADMAwAAPAUAAMEGAACgCAAArgoAAOIMAABtDwAAPBIAAEYVAABxGAAAuh0AABcjAABoKAAA1C0AAHUzAABRNwAAbDsAAIo/AAC3QwAA/0cAAF9MAADtUAAApVUAAIJaAAB5XwAAhmQAAEZnAAA=' },
-  { name: 'Snare', src: 'data:audio/wav;base64,UklGRvQFAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YdAFAAAAAAAASUZ9b31vXHYlb4RK9WFNTGpdC1MUYIJPiWrKUEVSiEhEVZ5aUUZPT2ZaVEQNWh9PJVYJW3lW4U2DTzhnx0qVXs5GS03HVu9ELl1LUgxW+FLKU+5bfUYvVTpR/VC0Va1Nbl1JTkVMIl6nTCVaEVMjUElZjEVWXF9QokzqU6RQeVExWWVLBlQnWItLOlYIWDtI2Wh0QDVeWUfWWQxUOUlsXzpHkFQMVupKcF3VSthRhVTbRihj/kUeXUxN+1TDVWpI32VxRAFdtU97UsFV30NJZehFbFkQUypVeVGsUSxcGk1pXaVKwlqrTx9R1V7tRSdh6kwXW5pSjkwiXGhMvVKIXOxH+luyVGNL+GJmSHRgOFAKVTRXIkkWYu1N/FYDWN1KMWPYR/ZgcVADVJ5UGk4jXGJPuluaUVlOUV69SUhf+1CJVvpULEvcXvNJE1tXVWdLx1qMVbVGk2XpR4pfiVF9UWNZOEshXshKGFtsUixRU1z9SVBc/lFpUt5WnklvYOJJyll8U3FPTFtsTPpZs1KTUJBXWUwcXpBLC1kRVbFM3FvbTsJUDViKS/5cv0p9XDhRa03FW85LwlYwVmBL6l0zS7JZEVOITvNZTU1AWbtOwlqFUExT5lfNRwBipESAXV9M9FMdVRdIMWNkRX9bRVFuUo9UB0eUYlVKU1xhTxdTLVoHSjdg2ErfWfJP2VG7WU1LdV7qS0VaNE8eUthbpEvZXbRMdlkQUC9RoFvxSlhdKVEHUk1YAUptXmdKTlnETlpR+1q8S5pemE69WBpS/E5RXSVMfF2KTb5WUVK6TQlcj08nUjJYU0ttXehMYFcMU/NNZ1uXTQ1cI09sUwxX6UkWYDRLi1f/UEBRo1kzS3ReXktoWNVPIVJYWVRMpVswTvZVN1HITbpar0uhWxlPRVLeV6hK5V7GSaVbDFBSUztXHExQW19OaVb3UfJNDlt3TURYTlFbTtpaLUy/WDRSnE4OWbFNGVsSTrlXZ1JMTsFaZk69WSFRgVF5V6VMX1u2Th9XcFG2TsJZJkz4WQJRaFGPVrlMS1r/TtRWdlCPUJlXsUuMWlBOylVMUjNPFFnNTPpY5lDkUB9XrE0LWi5Og1ZTUeBOXlhoTH9X0FCRUXBVBEz6WVVNMFecUAxQK1hLTKtY6U/MT8lW2E3tWCFPaVXEUPpPvlXhTXpYh07aVsRRnk5CWB9Nc1WTUuNMrVfGTixWs094UElUskzzWJpOc1VSUzhOz1U+TS5ZO08sVuVP40/0VNBNiVUdUIFOfVfkTExYz07oUxdT/03DVt5NkFahT6VRq1QfTcRZRk7XVj9Qek+cVwZOblQLUDZSLFQiThtZpkvMWABQKVBTVZlMRltKTQlYklBLUQdTQ01xWPtNAFbnUMJOnlcdThJZHk4aVixR8E0+V9VNy1UwUFRPi1TITFxa5UwvWHJQVFCQU4xNSlnmTKlY0E6aVJ1R0E1kWIRNIVgmTytUSFJJTl9W/k1MV1NPelKYUmZM7lmwTS5W1U+5UIpTF01aWD9OuVR+URJQUFMvTeJW1E8FUlNRRk7gVS9OlVbHTudSNVPkS6JZrU7NVG1RpE81VfNNIlfwTr9TUlGxTWBWy00JWIlOOVPtUR5Ot1YmTblW+E5TUhhSXE1FWFtOHVa5UJZOCLWABQM=' },
-  { name: 'Hi-Hat', src: 'data:audio/wav;base64,UklGRrQEAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YZAEAADDw8MAZmZmAPLy8gCsrKwAjIyMAJKSkgCKiooATU1NAEtLSwCDg4MAb29vANzc3AAsLCwAKioqAGBgYAAvLy8AGxsbAHp6egB3d3cAKCgoACEhIQDp6ekAFxcXAAkJCQBzc3MAFRUVABQUFADExMQABQUFAKqqqgDs7OwATk5OAM/PzwAEBAQAtra2ABISEgDz8/MA9fX1ALi4uADy8vIAzc3NADg4OAADAwMAd3d3ALm5uQCSkpIA9PT0AO3t7QC1tbUAaGhoAAICAgBjY2MAt7e3AJWVlQAgICAA5OTkAJqamgDS0tIACAgIAC4uLgCXl5cA+vr6AIKCggBWVlYADAwMAFtbWwDj4+MAZGRkAGJiYgCysrIAx8fHAKGhoQBnZ2cABgYGAFRUVAAGBgYAvr6+AAsLCwBSUlIAFhYWABwcHADFxcUAW1tbACUlJQAmJiYACAgIABQUFACPj48AWlpaANHR0QASEhIAUVFRAFZWVgA9PT0A29vbABcXFwCtra0Ax8fHAM3NzQAuLi4A1dXVABQUFAD8/PwAKCgoAAAAAABTU1MA2NjYAA8PDwALCwsAGhoaAPr6+gAxMTEAHBwcAO7u7gDo6OgANzc3ACkpKQBtbW0AAQEBAE9PTwBcXFwAyMjIAFJSUgBHR0cAFRUVABoaGgDNzc0AHh4eACcnJwB6enoA1dXVABkZGQACAgIAvb29ALu7uwDh4eEAZ2dnACIiIgD39/cAfHx8AA0NDQDm5uYAPT09AK+vrwATExMAHh4eAPf39wAeHh4AKysrAO/v7wD5+fkADQ0NAA4ODgCXl5cAKCgoAIqKigCAgIAAICAgACAgIACVlZUA7e3tAFBQUAAqKioA8PDwABoaGgDW1tYADg4OAO7u7gAYGBgA8fHxAA8PDwCZmZkAERERAFpaWgApKSkAoaGhAJeXlwCBgYEA7u7uALm5uQB3d3cAJycnAEpKSgAcHBwAwsLCANra2gDZ2dkACQkJAJaWlgDw8PAA7OzsAPv7+wArKysAQ0NDANfX1wBqamoA5eXlAFtbWwBjY2MAJSUlAO/v7wA0NDQAYGBgAODg4ABOTk4AUlJSAIWFhQDb29sAHR0dAHl5eQD19fUAV1dXACMjIwDo6OgAoKCgAAcHBwBZWVkAhISEAJiYmABnZ2cAfX19AOzs7ADw8PAA8vLyAAgICACHh4cAZWVlAJCQkAATExMAmpqaABUVFQC0tLQAAAAAAAAAAAAAAAAA5eXlAPHx8QDv7+8A5ubmAIiIiABKSkoAcHBwAJWVlQAAAAAAAAAAAAAAAAAAAAAATk5OAG9vbwBPT08AhoaGAMrKygAUFBQAZ2dnAJiYmADCwsIAAAAAAAAAAAAAAAAAAAAAAGlpaQAsLCwAra2tAN/f3wDQ0NAA09PTAEpKSgAQEBAAAAAAAAAAAAAAAAAAAAAAAJOTkwDa2toABwcHAE1NTQCWlpYAfn5+APj4+AAcHBwAv7+/AMvLywDq6uoAAAAAAAAAAAAAAAAAAAAAAJCQkAB7e3sAqampABMTEwBYWFgAR0dHADY2NgAZGRkAdXV1AEZGRgAMDAwAjo6OAAAAAAAAAAAAAAAAAInmnZbkiw==' },
-  { name: 'Clap', src: 'data:audio/wav;base64,UklGRpQFAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YXAFAAD+/v7+/vz8/Pz6+vr69/f39/X19fXy8vLy8PDw8O3t7e3q6urq6Ojo6Ovr6+vs7Ozs7e3t7e7u7u7t7e3t7Ozs7Ozs7Ozr6+vr6urq6unp6enp6enp6Ojo6Ofn5+fl5eXl4+Pj49/f39/b29vb19fX19PT09PPz8/Py8vLy8fHx8fDw8PDv7+/v7u7u7u3t7e3s7Ozs6+vr6+rq6urp6enp6Ojo6Ofn5+fm5ubm5eXl5eTk5OTj4+Pj4uLi4uHh4eHg4ODg39/f39/f39/e3t7e3t7e3t3d3d3d3d3d3d3d3dzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3d3d3d3d3d3e3t7e3t7e3t7e3t7f39/f39/f3+Dg4ODg4ODg4eHh4eLi4uLj4+Pj5OTk5OXl5eXm5ubm5+fn5+jo6Ojp6enp6urq6uvr6+vs7Ozs7e3t7e7u7u7v7+/v8PDw8PHx8fHy8vLy8/Pz8/T09PT19fX19vb29vf39/f4+Pj4+fn5+fr6+vr7+/v7/Pz8/P39/f3+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v79/f39/f39/fz8/Pz7+/v7+vr6+vn5+fn4+Pj49/f39/b29vb19fX18/Pz8/Ly8vLw8PDw7u7u7uzs7Ozq6urq6Ojo6Obm5ubl5eXl5OTk5OPj4+Pj4+Pj4uLi4uLi4uLi4uLi4+Pj4+Pj4+Pk5OTk5eXl5efn5+fo6Ojo6urq6uzs7Ozv7+/v8fHx8fT09PT29vb2+Pj4+Pr6+vr6+vr6+/v7+/z8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/A==' },
-  { name: 'Tom', src: 'data:audio/wav;base64,UklGRvwEAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YdgEAAAAAAAA/v7+/vz8/Pz6+vr69/f39/X19fXy8vLy8PDw8O3t7e3q6urq6Ojo6Ovr6+vs7Ozs7e3t7e7u7u7t7e3t7Ozs7Ozs7Ozr6+vr6urq6unp6enp6Ojo6Ofn5+fl5eXl4+Pj49/f39/b29vb19fX19PT09PPz8/Py8vLy8fHx8fDw8PDv7+/v7u7u7u3t7e3s7Ozs6+vr6+rq6urp6enp6Ojo6Ofn5+fm5ubm5eXl5eTk5OTj4+Pj4uLi4uHh4eHg4ODg39/f39/f39/e3t7e3t7e3t3d3d3d3d3d3d3d3dzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3d3d3d3d3d3e3t7e3t7e3t7e3t7f39/f39/f3+Dg4ODg4ODg4eHh4eLi4uLj4+Pj5OTk5OXl5eXm5ubm5+fn5+jo6Ojp6enp6urq6uvr6+vs7Ozs7e3t7e7u7u7v7+/v8PDw8PHx8fHy8vLy8/Pz8/T09PT19fX19vb29vf39/f4+Pj4+fn5+fr6+vr7+/v7/Pz8/P39/f3+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v79/f39/f39/fz8/Pz7+/v7+vr6+vn5+fn4+Pj49/f39/b29vb19fX18/Pz8/Ly8vLw8PDw7u7u7uzs7Ozq6urq6Ojo6Obm5ubl5eXl5OTk5OPj4+Pj4+Pj4uLi4uLi4uLi4uLi4+Pj4+Pj4+Pk5OTk5eXl5efn5+fo6Ojo6urq6uzs7Ozv7+/v8fHx8fT09PT29vb2+Pj4+Pr6+vr6+vr6+/v7+/z8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/A==' }
-];
+type SoundApiResponse = {
+  name: string;
+  owner_user_id: string;
+  source_type: string;
+  source_url: string;
+  created_at: any;
+  id: string;
+}
 
 const loadSoundFile = async (context: AudioContext, src: string, name: string): Promise<Sound> => {
   try {
@@ -143,6 +143,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [sounds, setSounds] = useState<Sound[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [apiFetchSuccess, setApiFetchSuccess] = useState(false);
   const [currentBeat, setCurrentBeat] = useState(0);
   const [bpm, setBpm] = useState(DEFAULT_BPM);
   const [posts, setPosts] = useState<PostData[]>([]);
@@ -163,27 +164,45 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const context = new (window.AudioContext || (window as any).webkitAudioContext)();
       setAudioContext(context);
       
-      // Load predefined sounds
-      const loadPromises = PREDEFINED_SOUNDS.map(async (sound) => {
-        try {
-          return await loadSoundFile(context, sound.src, sound.name);
-        } catch (error) {
-          console.error(`Failed to load ${sound.name}:`, error);
-          // Create a fallback tone for this sound
-          const buffer = createToneBuffer(context, 200 + Math.random() * 500);
-          return { 
-            id: `sound-${Date.now()}-${Math.floor(Math.random() * 1000)}`, 
-            name: sound.name, 
-            src: sound.src,
-            audioBuffer: buffer
-          };
+       // Load sounds from API
+       try {
+        const response = await fetch('/api/sounds');
+        if (!response.ok) {
+          throw new Error(`API request failed with status ${response.status}`);
         }
-      });
-      
-      const loadedSounds = await Promise.all(loadPromises);
-      console.log("Successfully loaded sounds:", loadedSounds);
-      setSounds(loadedSounds);
-      isAudioInitialized.current = true;
+        const data = await response.json();
+        
+        const loadedSounds = await Promise.all(data.sounds.map(async (sound:SoundApiResponse) => {
+          try {
+              return await loadSoundFile(context, sound.source_url, sound.name);
+          } catch (error) {
+              console.error(`Failed to load sound ${sound.name} from API:`, error);
+               // Create a fallback tone for this sound
+              const buffer = createToneBuffer(context, 200 + Math.random() * 500);
+              return { 
+                id: `sound-${Date.now()}-${Math.floor(Math.random() * 1000)}`, 
+                name: sound.name, 
+                src: sound.source_url,
+                audioBuffer: buffer
+              };
+          }
+      }));
+
+        setSounds(loadedSounds);
+        setApiFetchSuccess(true);
+        isAudioInitialized.current = true;
+      } catch (error) {
+        console.error("Failed to fetch sounds from API:", error);
+         // Fallback to a simple tone
+        const buffer = createToneBuffer(context, 300 + Math.random() * 400);
+        const fallbackSound = { 
+          id: `sound-${Date.now()}-${Math.floor(Math.random() * 1000)}`, 
+          name: 'fallback_sound', 
+          src: '',
+          audioBuffer: buffer
+        };
+        setSounds([fallbackSound]);
+      }
     } catch (error) {
       console.error("Failed to initialize audio:", error);
       throw error;
@@ -423,6 +442,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const contextValue: AudioContextType = {
     audioContext,
     isPlaying,
+    apiFetchSuccess,
     sounds,
     currentBeat,
     bpm,

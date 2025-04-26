@@ -1,0 +1,1 @@
+global.NextResponse = {json: jest.fn().mockImplementation((data) => ({json: () => Promise.resolve(data),status: 200,}))};

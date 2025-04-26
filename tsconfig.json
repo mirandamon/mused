@@ -5,15 +5,16 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": ".",    
+     "noImplicitAny": false,
+     "noUnusedParameters": false,
+     "skipLibCheck": true,
+     "allowJs": true,
+     "noUnusedLocals": false,
+     "strictNullChecks": false,
     "paths": {
-      "@/*": ["./src/*"]
-    },
-    "noImplicitAny": false,
-    "noUnusedParameters": false,
-    "skipLibCheck": true,
-    "allowJs": true,
-    "noUnusedLocals": false,
-    "strictNullChecks": false
+      "@/*": ["./src/*"],
+      "next/server": ["./node_modules/next/server.d.ts"]
+    }
   }
 }
